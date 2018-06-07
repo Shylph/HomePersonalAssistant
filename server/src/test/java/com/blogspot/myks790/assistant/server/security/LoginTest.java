@@ -1,4 +1,4 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.security;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

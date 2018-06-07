@@ -1,7 +1,8 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.security;
 
+import com.blogspot.myks790.assistant.server.UserAuthentication;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,10 +16,10 @@ import java.util.List;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class AuthProvider implements AuthenticationProvider {
 
-    @Autowired
-    private AuthorizationService authorizationService;
+    private final AuthorizationService authorizationService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -28,7 +29,7 @@ public class AuthProvider implements AuthenticationProvider {
         return authenticate(id, password);
     }
 
-    public Authentication authenticate(String id, String password) throws AuthenticationException {
+    private Authentication authenticate(String id, String password) throws AuthenticationException {
         Account account = authorizationService.login(id, password);
         if (account == null) return null;
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();

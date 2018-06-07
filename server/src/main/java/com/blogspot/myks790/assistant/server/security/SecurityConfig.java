@@ -1,7 +1,7 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.security;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,14 +13,11 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Slf4j
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private AuthProvider authProvider;
 
-    @Autowired
-    AuthorizationService authorizationService;
-
-
+    private final AuthorizationService authorizationService;
+    private final AuthProvider authProvider;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -38,8 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         log.info("SecurityConfig configure http");
-        http.csrf().disable();
-
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/login-error", "/login-processing").permitAll()
                 .antMatchers("/**").authenticated();
@@ -59,7 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true);
 
         http.authenticationProvider(authProvider);
-
+        /*        http.csrf().disable();*/
+        /*        http.authorizeRequests().antMatchers("/**").permitAll();*/
 
     }
+
 }

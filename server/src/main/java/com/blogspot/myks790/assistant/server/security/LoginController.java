@@ -1,4 +1,4 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
