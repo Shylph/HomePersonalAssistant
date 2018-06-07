@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>할 일!</title>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" type="text/css" href="/css/fullcalendar.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/fullcalendar.min.css"/>
+    <script src='js/moment.min.js'></script>
+    <script type="text/javascript" src="/js/fullcalendar.min.js"></script>
+
+</head>
+<body>
+<div id="calender" style="width: 550px"></div>
+<form>
+    <p>
+        <input id="date" type="text" placeholder="yyyy-mm-dd"/>
+        <input id="hour" type="text" placeholder="시간"/>
+        <input id="task" type="text" placeholder="할일"/>
+        <input type="button" id="save" value="등록"/>
+    </p>
+</form>
+
+<div id="Content">
+    <table>
+        <caption>할일 목록</caption>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>시간</th>
+            <th>할 일</th>
+            <th>수정</th>
+            <th>삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+<script type="text/javascript">
+
+
+    var host = '/calendar/api';
+
+    function save() {
+        var toDo = {
+            date: $('#date').val(),
+            hour: $('#hour').val(),
+            task: $('#task').val()
+        };
+
+        requestData('POST', toDo);
+        return false;
+    }
+
+    function requestData(method, data) {
+        $.ajax({
+            url: host,
+            method: method,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        });
+    }
+
+    $(document).ready(function () {
+        $('#save').on("click", save);
+
+        $.get(host + "/list", function (toDoList) {
+            var calendarToDoList = [];
+            $.each(toDoList, function (index, value) {
+                calendarToDoList.push({
+                    id: value.id,
+                    title: value.task,
+                    start: value.date,
+                    end: value.date
+                });
+                $("#Content").find("tbody").append(
+                    '\<tr> \
+                        <td>' + value.date + '</td> \
+                        <td>' + value.hour + '</td> \
+                        <td>' + value.task + '</td> \
+                        <td><a href="#" class="remove" data=' + value.id + '>삭제</a></td> \
+                    </tr>\
+                    ');
+                /*   <td><a href="#" class="modify" data=' + value.id + '>수정</a></td> \*/
+            });
+            $('#calender').fullCalendar({
+                events: function (start, end, timezone, callback) {
+                    callback(calendarToDoList);
+                }
+            })
+            $(".modify").on("click", function (e) {
+                var id = $(e.currentTarget).attr("data");
+                window.location.href = "edit?id=" + id;
+            });
+            $(".remove").on("click", function (e) {
+                var target = e.currentTarget;
+                var id = $(target).attr("data");
+                var row = $(target).parent().parent();
+                $.ajax({
+                    url: host + '/' + id,
+                    method: 'DELETE',
+                    success: function (result) {
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+
+    });
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(function () {
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+
+</script>
+</body>
+</html>
