@@ -1,6 +1,7 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.security;
 
 
+import com.blogspot.myks790.assistant.server.security.Account;
 import lombok.Data;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;

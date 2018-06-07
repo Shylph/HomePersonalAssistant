@@ -54,9 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true);
 
         http.authenticationProvider(authProvider);
-        /*        http.csrf().disable();*/
-        /*        http.authorizeRequests().antMatchers("/**").permitAll();*/
-
+/*                http.csrf().disable();
+                http.authorizeRequests().antMatchers("/**").permitAll();*/
     }
 
 }

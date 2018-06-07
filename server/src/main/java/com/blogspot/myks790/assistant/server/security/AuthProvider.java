@@ -1,6 +1,5 @@
 package com.blogspot.myks790.assistant.server.security;
 
-import com.blogspot.myks790.assistant.server.UserAuthentication;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
