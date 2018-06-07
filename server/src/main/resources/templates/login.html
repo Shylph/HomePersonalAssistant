@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="kr">
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
     <meta charset="UTF-8">
     <title>로그인</title>
@@ -9,12 +9,13 @@
     <form class="login-form" action="/login" method="POST">
         <fieldset>
             <legend>Login</legend>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <p>
-                <label>아이디</label>
+                <label for="id">아이디</label>
                 <input id="id" type="text" name="id"/>
             </p>
             <p>
-                <label>암 호</label>
+                <label for="password">암 호</label>
                 <input id="password" type="password" name="password"/>
             </p>
             <p>
