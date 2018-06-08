@@ -1,4 +1,3 @@
-/*
 package com.blogspot.myks790.assistant.server;
 
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +11,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/calendar");
+        registry.addViewController("/home");
     }
-
 }
-*/
