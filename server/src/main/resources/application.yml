@@ -4,7 +4,5 @@ spring:
     url: jdbc:mysql://${db.ip}/personal_assistant?characterEncoding=utf-8&useSSL=false
     username: ${db.name}
     password: ${db.password}
-
-
-
-
+  thymeleaf:
+    cache: false
