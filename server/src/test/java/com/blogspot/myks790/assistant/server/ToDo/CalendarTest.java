@@ -1,7 +1,5 @@
 package com.blogspot.myks790.assistant.server.ToDo;
 
-import com.blogspot.myks790.assistant.server.ToDo.ToDo;
-import com.blogspot.myks790.assistant.server.ToDo.ToDoRepository;
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +15,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 /*
- *   테스트를 돌리려면 SecurityCongig에서 csrf를 꺼야함
- *   또한 path를 허용해줘야 함
+ *   테스트 하려면 vm options 에 프로파일 관련하여 -Dspring.profiles.active=test 추가해야 함.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
