@@ -21,8 +21,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CalendarTest {
     private static final String PATH = "/calendar/api";
-    @Autowired
-    ToDoRepository toDoRepository;
+
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -70,6 +69,10 @@ public class CalendarTest {
         ToDo toDo = getTestToDoData();
         ToDo createdToDo = createToDo(toDo);
         validate(toDo, createdToDo);
+        delete(createdToDo);
+    }
+
+    private void delete(ToDo createdToDo) {
         restTemplate.delete(PATH + "/" + createdToDo.getId());
         ToDo resultToDo = restTemplate.getForObject(PATH + "/" + createdToDo.getId(), ToDo.class);
         assertThat(resultToDo.getId(), is(0L));
@@ -85,4 +88,35 @@ public class CalendarTest {
         toDo.setTask("캘린더 동작하게하기");
         return toDo;
     }
+
+    private ToDo getTestToDoData(Date date) {
+        ToDo toDo = new ToDo();
+        toDo.setDate(date);
+        toDo.setHour(1);
+        toDo.setTask("캘린더 동작하게하기");
+        return toDo;
+    }
+
+    @Test
+    public void getWeekToDoReport() {
+/*
+        ToDo toDo1 = getTestToDoData(Date.valueOf("2018-7-12"));
+        createToDo(toDo1);
+        ToDo toDo2 = getTestToDoData(Date.valueOf("2018-7-16"));
+        createToDo(toDo2);
+
+        ToDo result1 = doList.get(0);
+        ToDo result2 = doList.get(1);
+        validate(toDo1, result1);
+        validate(toDo2, result2);
+        delete(result1);
+        delete(result2);
+*/
+        String startDate = "2018-7-10";
+        String endDate = "2018-7-17";
+        List<ToDo> toDoList = restTemplate.getForObject(PATH + "/week_report?start_date=" + startDate + "&end_date=" + endDate, List.class);
+        assertThat(toDoList, not(IsEmptyCollection.empty()));
+    }
+
+
 }

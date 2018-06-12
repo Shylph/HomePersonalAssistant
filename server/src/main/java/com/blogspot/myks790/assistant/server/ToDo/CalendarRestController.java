@@ -2,9 +2,9 @@ package com.blogspot.myks790.assistant.server.ToDo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @Slf4j
@@ -31,6 +31,11 @@ public class CalendarRestController {
     public List<ToDo> list() {
         log.info("list get");
         return toDoRepository.findAll();
+    }
+
+    @GetMapping("/week_report")
+    public List<ToDo> weekReport(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate) {
+        return toDoRepository.findAll(Date.valueOf(startDate), Date.valueOf(endDate));
     }
 
     @PutMapping
