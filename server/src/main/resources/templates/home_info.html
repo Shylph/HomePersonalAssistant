@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>방 상태</title>
+    <link rel="stylesheet" type="text/css" href="/css/billboard.min.css"/>
+    <script src='js/d3/d3.min.js'></script>
+    <script src='js/billboard.min.js'></script>
+</head>
+<body>
+<div id="chart"></div>
+<script>
+    bb.generate({
+        bindto: "#chart",
+        data: {
+            columns: [
+                ["data1", 30, 200, 100, 170, 150, 250],
+                ["data2", 130, 100, 140, 35, 110, 50]
+            ],
+            types: {
+                data1: "line",
+                data2: "line"
+            },
+            colors: {
+                data1: "red",
+                data2: "green"
+            }
+        }
+    });
+</script>
+</body>
+</html>
