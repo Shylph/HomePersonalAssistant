@@ -14,5 +14,6 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/home");
         registry.addViewController("/setting");
         registry.addViewController("/home_info");
+        registry.addViewController("/week_report");
     }
 }

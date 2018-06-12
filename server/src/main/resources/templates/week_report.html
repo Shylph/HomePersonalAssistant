@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>주차보고서</title>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<form>
+    <p>
+        <label for="endDate">날짜</label>
+        <input id="endDate" type="text" value="2018-07-12" placeholder="yyyy-mm-dd"/>
+        <input type="button" id="search" value="검색"/>
+    </p>
+</form>
+
+<div id="Content">
+    <table>
+        <caption>할일 목록</caption>
+        <thead>
+        <tr>
+            <th>날짜</th>
+            <th>시간</th>
+            <th>한 일</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript">
+
+
+    var host = '/calendar/api';
+
+    function search() {
+        var endDate = new Date(Date.parse($('#endDate').val()));
+        var startDate = new Date(Date.parse($('#endDate').val()));
+        startDate.setDate(endDate.getDate() - 7);
+
+        inflate(convertDate(startDate), convertDate(endDate));
+        return false;
+    }
+
+    function convertDate(date) {
+        return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate();
+    }
+
+    function inflate(startDate, endDate) {
+        $.get(host + "/week_report?start_date=" + startDate + "&end_date=" + endDate, function (toDoList) {
+            var totalWorkTime=0;
+            var tbody = $("#Content").find("tbody");
+            tbody.empty();
+            $.each(toDoList, function (index, value) {
+                tbody.append(
+                    '\<tr> \
+                        <td>' + value.date + '</td> \
+                        <td>' + value.hour + '</td> \
+                        <td>' + value.task + '</td> \
+                    </tr>\
+                    ');
+                totalWorkTime += value.hour;
+            });
+            tbody.append('\<tr><td> 총 작업한 시간은 '+totalWorkTime +'시간 입니다.</td></tr>')
+
+        });
+    }
+
+    $(document).ready(function () {
+        $('#search').on("click", search);
+    });
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(function () {
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+
+</script>
+</body>
+</html>
