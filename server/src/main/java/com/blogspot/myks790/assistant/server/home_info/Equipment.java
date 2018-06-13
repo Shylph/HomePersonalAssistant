@@ -1,4 +1,4 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.home_info;
 
 import lombok.Data;
 

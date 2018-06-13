@@ -1,4 +1,4 @@
-package com.blogspot.myks790.assistant.server;
+package com.blogspot.myks790.assistant.server.home_info;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
