@@ -16,7 +16,7 @@ import java.util.Collection;
 public class Account implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long account_id;
 
     @Column(nullable = false, unique = true, length = 50)
     private String username;
