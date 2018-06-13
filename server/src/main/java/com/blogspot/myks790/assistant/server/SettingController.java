@@ -7,6 +7,7 @@ import com.blogspot.myks790.assistant.server.kakao.template.KakaoButton;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoLink;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoMessageTemplate;
 import com.blogspot.myks790.assistant.server.security.Account;
+import com.blogspot.myks790.assistant.server.security.UserAuthentication;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -95,7 +96,7 @@ public class SettingController {
     }
 
     @GetMapping("/collectT_H")
-    public String collect() {
+    public String collect(UserAuthentication authentication) {
         Runnable runnable = () -> {
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet("http://192.168.1.178:8090/sensor/resource");
@@ -104,8 +105,9 @@ public class SettingController {
                 response = httpclient.execute(httpGet);
                 HttpEntity entity = response.getEntity();
                 String src = EntityUtils.toString(entity);
-                HomeInfo  homeInfo = new ObjectMapper().readerFor(HomeInfo.class).readValue(src);
+                HomeInfo homeInfo = new ObjectMapper().readerFor(HomeInfo.class).readValue(src);
                 homeInfo = homeInfo;
+                authentication.getAccount();
                 Account account = new Account();
                 account.setAccount_id(17l);
                 homeInfo.setAccount(account);
@@ -115,7 +117,7 @@ public class SettingController {
             }
         };
 
-        scheduler.startScheduler(runnable, new CronTrigger("* 1 * * * *"));
+        scheduler.startScheduler(runnable, new CronTrigger("0 1 * * * *"));
         return "/setting";
     }
 

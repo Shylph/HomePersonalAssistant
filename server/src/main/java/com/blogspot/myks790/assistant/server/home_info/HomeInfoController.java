@@ -12,6 +12,8 @@ import java.util.List;
 public class HomeInfoController {
     @Autowired
     EquipmentRepository equipmentRepository;
+    @Autowired
+    HomeInfoRepository homeInfoRepository;
 
     @PostMapping("/register")
     public void register(@RequestBody Equipment equipment) {
@@ -23,5 +25,11 @@ public class HomeInfoController {
     public List<Equipment> equipmentList() {
         log.info("equipment_list");
         return equipmentRepository.findAll();
+    }
+
+    @GetMapping("/info_list")
+    public List<HomeInfo> infoList() {
+        log.info("info_list");
+        return homeInfoRepository.findAll();
     }
 }
