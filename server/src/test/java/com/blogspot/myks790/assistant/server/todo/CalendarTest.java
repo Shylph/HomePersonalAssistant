@@ -1,4 +1,4 @@
-package com.blogspot.myks790.assistant.server.ToDo;
+package com.blogspot.myks790.assistant.server.todo;
 
 import org.hamcrest.collection.IsEmptyCollection;
 import org.junit.Test;
@@ -100,13 +100,13 @@ public class CalendarTest {
     @Test
     public void getWeekToDoReport() {
 /*
-        ToDo toDo1 = getTestToDoData(Date.valueOf("2018-7-12"));
+        todo toDo1 = getTestToDoData(Date.valueOf("2018-7-12"));
         createToDo(toDo1);
-        ToDo toDo2 = getTestToDoData(Date.valueOf("2018-7-16"));
+        todo toDo2 = getTestToDoData(Date.valueOf("2018-7-16"));
         createToDo(toDo2);
 
-        ToDo result1 = doList.get(0);
-        ToDo result2 = doList.get(1);
+        todo result1 = doList.get(0);
+        todo result2 = doList.get(1);
         validate(toDo1, result1);
         validate(toDo2, result2);
         delete(result1);

@@ -1,4 +1,4 @@
-package com.blogspot.myks790.assistant.server.ToDo;
+package com.blogspot.myks790.assistant.server.todo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
