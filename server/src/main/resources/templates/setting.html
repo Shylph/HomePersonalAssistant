@@ -7,10 +7,24 @@
 
 </head>
 <body>
-날씨 정보 알림
-<button id="login" onclick="location.href = 'setting/kakao/connect'"
-        style=" width:70px; height: 31px; background:url(/images/kakao_login_btn_small.png)  no-repeat"></button>
-
+<p>
+    알림을 받으려면 카카오톡 계정이 필요합니다.
+    <button id="login" onclick="location.href = 'setting/kakao/connect'"
+            style=" width:70px; height: 31px; background:url(/images/kakao_login_btn_small.png)  no-repeat"></button>
+</p>
+<p>
+    <label>
+        <input type="number" min="0" max="23"/>시 날씨 정보 알림
+        <input type="checkbox"/>
+        <a href="/setting/notice" ><input type="button" value="지금 보내보기"/></a>
+    </label>
+</p>
+<p>
+    <label>
+        주차 보고 알림
+        <input type="button" value="지금 보내보기"/>
+    </label>
+</p>
 
 </body>
 </html>
