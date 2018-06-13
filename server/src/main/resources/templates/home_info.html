@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>방 상태</title>
     <link rel="stylesheet" type="text/css" href="/css/billboard.min.css"/>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
     <script src='js/d3/d3.min.js'></script>
     <script src='js/billboard.min.js'></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
+<select id="list">
+    <option value='' selected>- 선택 -</option>
+</select>
 <div id="chart"></div>
+
+<a href="register_equipment"><input type="button" value="기기 등록"/></a>
 <script>
     bb.generate({
         bindto: "#chart",
         data: {
             columns: [
-                ["data1", 30, 200, 100, 170, 150, 250],
-                ["data2", 130, 100, 140, 35, 110, 50]
+                ["data1", 30, 80, 100, 70, 90, 20],
+                ["data2", 65, 100, 70, 35, 100, 50]
             ],
             types: {
                 data1: "line",
@@ -26,6 +34,31 @@
                 data2: "green"
             }
         }
+    });
+
+    var host = '/home_info';
+
+    function inflate() {
+        $.get(host + "/equipment_list", function (equipment) {
+            var selectList = $("#list");
+            selectList.empty();
+            $.each(equipment, function (index, value) {
+                selectList.append('<option value='+value.name+'> ' + value.name + '</option>');
+            });
+
+        });
+    }
+
+    $(document).ready(function () {
+        inflate();
+    });
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(function () {
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
     });
 </script>
 </body>

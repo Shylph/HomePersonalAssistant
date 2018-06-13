@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>기기 등록</title>
+    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<form>
+    <p>
+        <input id="ip" type="text" placeholder="xxx.xxx.xxx.xxx" value="192.168.18.12"/>
+        <input id="port" type="text" placeholder="포트" value="8090"/>
+        <input id="name" type="text" placeholder="이름" value="방1 센서"/>
+        <input type="button" id="save" value="등록"/>
+    </p>
+</form>
+<script>
+    var host = '/home_info/register';
+    function save() {
+        var equipment = {
+            ip: $('#ip').val(),
+            port: $('#port').val(),
+            name: $('#name').val()
+        };
+
+        requestData('POST', equipment);
+        return false;
+    }
+
+    function requestData(method, data) {
+        $.ajax({
+            url: host,
+            method: method,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        });
+    }
+    $(document).ready(function () {
+        $('#save').on("click", save);
+    });
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    $(function () {
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+</script>
+</body>
+</html>
