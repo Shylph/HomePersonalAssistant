@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
     <meta charset="UTF-8">
     <title>주차보고서</title>
-    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <th:block th:insert="~{fragment/menu::menu_css}"/>
 </head>
 <body>
+
+<nav th:replace="~{fragment/menu::menu_nav}"></nav>
 <form>
     <p>
         <label for="endDate">날짜</label>
@@ -52,7 +52,7 @@
 
     function inflate(startDate, endDate) {
         $.get(host + "/week_report?start_date=" + startDate + "&end_date=" + endDate, function (toDoList) {
-            var totalWorkTime=0;
+            var totalWorkTime = 0;
             var tbody = $("#Content").find("tbody");
             tbody.empty();
             $.each(toDoList, function (index, value) {
@@ -65,7 +65,7 @@
                     ');
                 totalWorkTime += value.hour;
             });
-            tbody.append('\<tr><td> 총 작업한 시간은 '+totalWorkTime +'시간 입니다.</td></tr>')
+            tbody.append('\<tr><td> 총 작업한 시간은 ' + totalWorkTime + '시간 입니다.</td></tr>')
 
         });
     }

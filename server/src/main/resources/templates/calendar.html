@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
     <meta charset="UTF-8">
     <title>할 일!</title>
-    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
-    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
-    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <th:block th:insert="~{fragment/menu::menu_css}"/>
 
     <link rel="stylesheet" type="text/css" href="/css/fullcalendar.css"/>
     <link rel="stylesheet" type="text/css" href="/css/fullcalendar.min.css"/>
     <script src='js/moment.min.js'></script>
     <script type="text/javascript" src="/js/fullcalendar.min.js"></script>
-
 </head>
 <body>
+<nav th:replace="~{fragment/menu::menu_nav}"></nav>
 <div id="calender" style="width: 550px"></div>
 <form>
     <p>

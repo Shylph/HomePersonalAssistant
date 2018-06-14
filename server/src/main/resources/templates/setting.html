@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="kr">
 <head>
     <meta charset="UTF-8">
     <title>setting</title>
-    <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+    <th:block th:insert="~{fragment/menu::menu_css}"/>
 
 </head>
 <body>
+
+<nav th:replace="~{fragment/menu::menu_nav}"></nav>
 <p>
     알림을 받으려면 카카오톡 계정이 필요합니다.
     <button id="login" onclick="location.href = 'setting/kakao/connect'"
@@ -16,13 +18,13 @@
     <label>
         <input type="number" min="0" max="23"/>시 날씨 정보 알림
         <input type="checkbox"/>
-        <a href="/setting/notice" ><input type="button" value="지금 보내보기"/></a>
+        <a href="/setting/notice"><input type="button" value="지금 보내보기"/></a>
     </label>
 </p>
 <p>
     <label>
         온도 정보 수집
-        <a href="/setting/collectT_H" ><input type="button" value="온습도 정보 수집 시작"/></a>
+        <a href="/setting/collectT_H"><input type="button" value="온습도 정보 수집 시작"/></a>
     </label>
 </p>
 <p>

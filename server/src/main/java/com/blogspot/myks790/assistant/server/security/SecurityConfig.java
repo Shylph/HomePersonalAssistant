@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login")
                     .loginProcessingUrl("/login")
                     .failureUrl("/login-error")
-                    .defaultSuccessUrl("/home", true)
+                    .defaultSuccessUrl("/calendar", true)
                     .usernameParameter("id")
                     .passwordParameter("password");
 
