@@ -41,14 +41,7 @@
     $(document).ready(function () {
         $('#save').on("click", save);
     });
-
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
-    $(function () {
-        $(document).ajaxSend(function (e, xhr, options) {
-            xhr.setRequestHeader(header, token);
-        });
-    });
 </script>
+<script type="text/javascript" th:src="@{/js/csrfSetting.js}"></script>
 </body>
 </html>
