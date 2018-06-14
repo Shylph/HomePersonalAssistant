@@ -1,6 +1,5 @@
 package com.blogspot.myks790.assistant.server.home_info;
 
-import com.blogspot.myks790.assistant.server.security.Account;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,7 +10,7 @@ import java.util.Date;
 public class HomeInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private long info_id;
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
@@ -19,7 +18,6 @@ public class HomeInfo {
     private float temperature;
     @Column(nullable = false)
     private float humidity;
-    @ManyToOne
-    @JoinColumn(name="account_id")
-    private Account account;
+
+
 }

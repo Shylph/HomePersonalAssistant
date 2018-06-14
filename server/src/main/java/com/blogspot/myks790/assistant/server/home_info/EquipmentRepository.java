@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-interface EquipmentRepository extends JpaRepository<Equipment, Long> {
+public interface EquipmentRepository extends JpaRepository<Equipment, Long> {
 
     @Query("select equipment from Equipment equipment where equipment.account = :account")
     List<Equipment> findAll(@Param("account") Account account);

@@ -4,10 +4,11 @@ import com.blogspot.myks790.assistant.server.security.Account;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Data
 @Entity
-class Equipment {
+public class Equipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -20,4 +21,7 @@ class Equipment {
     @ManyToOne
     @JoinColumn(name="account_id")
     private Account account;
+
+    @OneToMany
+    private Collection<HomeInfo> homeInfos;
 }

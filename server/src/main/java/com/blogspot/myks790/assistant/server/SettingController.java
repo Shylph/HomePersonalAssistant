@@ -1,5 +1,6 @@
 package com.blogspot.myks790.assistant.server;
 
+import com.blogspot.myks790.assistant.server.home_info.EquipmentRepository;
 import com.blogspot.myks790.assistant.server.home_info.HomeInfo;
 import com.blogspot.myks790.assistant.server.home_info.HomeInfoRepository;
 import com.blogspot.myks790.assistant.server.kakao.KakaoToken;
@@ -7,7 +8,6 @@ import com.blogspot.myks790.assistant.server.kakao.KakaoTokenRepository;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoButton;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoLink;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoMessageTemplate;
-import com.blogspot.myks790.assistant.server.security.Account;
 import com.blogspot.myks790.assistant.server.security.UserAuthentication;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +50,8 @@ public class SettingController {
     HomeInfoRepository homeInfoRepository;
     @Autowired
     KakaoTokenRepository kakaoTokenRepository;
+    @Autowired
+    EquipmentRepository equipmentRepository;
 
 
     @Autowired
@@ -106,6 +108,7 @@ public class SettingController {
     @GetMapping("/collectT_H")
     public String collect(UserAuthentication authentication) {
         Runnable runnable = () -> {
+            log.info("collectT_H runnable");
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet("http://192.168.1.178:8090/sensor/resource");
             CloseableHttpResponse response = null;
@@ -114,18 +117,14 @@ public class SettingController {
                 HttpEntity entity = response.getEntity();
                 String src = EntityUtils.toString(entity);
                 HomeInfo homeInfo = new ObjectMapper().readerFor(HomeInfo.class).readValue(src);
-                homeInfo = homeInfo;
-                authentication.getAccount();
-                Account account = new Account();
-                account.setAccount_id(17l);
-                homeInfo.setAccount(account);
+                //homeInfo.setEquipment(equipmentRepository.getOne(1L));
                 homeInfoRepository.save(homeInfo);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         };
 
-        scheduler.startScheduler(runnable, new CronTrigger("0 1 * * * *"));
+        scheduler.startScheduler(runnable, new CronTrigger("0 */1 * * * *"));
         return "/setting";
     }
 
@@ -136,9 +135,9 @@ public class SettingController {
         return "/setting";
     }
 
-    private void printWeather(){
+    private void printWeather() {
         CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?serviceKey="+weatherKey+"&base_date=20180614&base_time=0500&nx=60&ny=127&numOfRows=10&pageSize=10&pageNo=1&startPage=1&_type=json");
+        HttpGet httpGet = new HttpGet("http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?serviceKey=" + weatherKey + "&base_date=20180614&base_time=0500&nx=60&ny=127&numOfRows=10&pageSize=10&pageNo=1&startPage=1&_type=json");
         CloseableHttpResponse response = null;
         try {
             response = httpclient.execute(httpGet);

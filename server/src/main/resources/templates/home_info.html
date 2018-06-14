@@ -18,49 +18,62 @@
 <a href="register_equipment"><input type="button" value="기기 등록"/></a>
 <script>
     var host = '/home_info';
+    var selectList = $("#list");
 
     function inflate() {
         $.get(host + "/equipment_list", function (equipment) {
-            var selectList = $("#list");
             selectList.empty();
             $.each(equipment, function (index, value) {
-                selectList.append('<option value=' + value.name + '> ' + value.name + '</option>');
+                selectList.append('<option value=' + value.id + '> ' + value.name + '</option>');
             });
-
+            getInfo();
         });
     }
 
     function getInfo() {
-        $.get(host + "/info_list", function (info) {
-            var data2 = [];
-            data2.push("data2");
+        var id = selectList.val();
+        console.log(id)
+        $.get(host + "/info_list?equipment_id="+id, function (info) {
+            var timestamp = ["x"];
+            var temperature = ["temperature"];
+            var humidity = ["humidity"];
 
             $.each(info, function (index, value) {
-                data2.push(10)
+                var date = new Date(value.timestamp);
+                date.setUTCHours(date.getUTCHours()+9);
+                var dateStr = date.toISOString().slice().slice(0,19);
+                timestamp.push(dateStr);
+                temperature.push(value.temperature);
+                humidity.push(value.humidity);
             });
-            bb.generate({
-                bindto: "#chart",
+
+            var chart = bb.generate({
                 data: {
+                    x: "x",
+                    xFormat:  "%Y-%m-%dT%H:%M:%S",
                     columns: [
-                        ["data1", 30, 80, 100, 70, 90, 20],
-                        data2
-                    ],
-                    types: {
-                        data1: "line",
-                        data2: "line"
-                    },
-                    colors: {
-                        data1: "red",
-                        data2: "green"
+                        timestamp,
+                        temperature,
+                        humidity
+                    ]
+                },
+                axis: {
+                    x: {
+                        type: "timeseries",
+                        tick: {
+                            format: "%Y-%m-%d/%H:%M:%S"
+                        }
                     }
-                }
+                },
+                bindto: "#chart"
             });
+
+
         });
     }
 
     $(document).ready(function () {
         inflate();
-        getInfo();
     });
 </script>
 </body>

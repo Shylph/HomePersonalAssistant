@@ -30,8 +30,9 @@ public class HomeInfoController {
     }
 
     @GetMapping("/info_list")
-    public List<HomeInfo> infoList(UserAuthentication authentication) {
+    public List<HomeInfo> infoList(@RequestParam(value = "equipment_id") Long equipmentId) {
         log.info("info_list");
-        return homeInfoRepository.findAll(authentication.getAccount());
+        Equipment equipment = equipmentRepository.getOne(equipmentId);
+        return homeInfoRepository.findAllById(equipment);
     }
 }
