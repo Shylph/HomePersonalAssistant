@@ -40,11 +40,14 @@ import java.util.List;
 public class SettingController {
     @Value("${kakao.client.id}")
     private String clientId;
+    @Value("${weather.api.key}")
+    private String weatherKey;
     private String redirectUrl;
     private KakaoToken kakaoToken;
     private final NoticeScheduler scheduler;
     @Autowired
     HomeInfoRepository homeInfoRepository;
+
 
     @Autowired
     public SettingController(NoticeScheduler scheduler) {
@@ -124,7 +127,22 @@ public class SettingController {
     @GetMapping("/notice")
     public String notice() {
         sendToMeWithKakaotalk("알림 보내기~~~~");
+        printWeather();
         return "/setting";
+    }
+
+    private void printWeather(){
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?serviceKey="+weatherKey+"&base_date=20180614&base_time=0500&nx=60&ny=127&numOfRows=10&pageSize=10&pageNo=1&startPage=1&_type=json");
+        CloseableHttpResponse response = null;
+        try {
+            response = httpclient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+            String src = EntityUtils.toString(entity);
+            log.info(src);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void sendToMeWithKakaotalk(String message) {
