@@ -6,3 +6,8 @@ spring:
     password: ${db.password}
   thymeleaf:
     cache: false
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
