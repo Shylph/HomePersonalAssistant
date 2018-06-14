@@ -14,7 +14,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,20 +25,17 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/setting")
 public class SettingController {
-
-    @Value("${weather.api.key}")
-    private String weatherKey;
     private final NoticeScheduler scheduler;
-    @Autowired
-    HomeInfoRepository homeInfoRepository;
-    @Autowired
-    EquipmentRepository equipmentRepository;
-    @Autowired
-    KakaoApi kakaoApi;
+    private final HomeInfoRepository homeInfoRepository;
+    private final KakaoApi kakaoApi;
+    private final WeatherAPI weatherAPI;
 
     @Autowired
-    public SettingController(NoticeScheduler scheduler) {
+    public SettingController(NoticeScheduler scheduler, HomeInfoRepository homeInfoRepository, KakaoApi kakaoApi, WeatherAPI weatherAPI) {
         this.scheduler = scheduler;
+        this.homeInfoRepository = homeInfoRepository;
+        this.kakaoApi = kakaoApi;
+        this.weatherAPI = weatherAPI;
     }
 
 
@@ -69,22 +65,9 @@ public class SettingController {
     @GetMapping("/notice")
     public String notice() {
         kakaoApi.sendToMeWithKakaotalk("알림 보내기~~~~");
-        printWeather();
+        weatherAPI.printWeather();
         return "/setting";
     }
 
-    private void printWeather() {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastSpaceData?serviceKey=" + weatherKey + "&base_date=20180614&base_time=0500&nx=60&ny=127&numOfRows=10&pageSize=10&pageNo=1&startPage=1&_type=json");
-        CloseableHttpResponse response = null;
-        try {
-            response = httpclient.execute(httpGet);
-            HttpEntity entity = response.getEntity();
-            String src = EntityUtils.toString(entity);
-            log.info(src);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }
