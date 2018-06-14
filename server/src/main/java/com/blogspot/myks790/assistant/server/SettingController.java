@@ -1,6 +1,5 @@
 package com.blogspot.myks790.assistant.server;
 
-import com.blogspot.myks790.assistant.server.home_info.EquipmentRepository;
 import com.blogspot.myks790.assistant.server.home_info.HomeInfo;
 import com.blogspot.myks790.assistant.server.home_info.HomeInfoRepository;
 import com.blogspot.myks790.assistant.server.kakao.KakaoApi;
@@ -18,6 +17,7 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 
@@ -69,5 +69,20 @@ public class SettingController {
         return "/setting";
     }
 
+    @GetMapping("/weather/notify")
+    public String notifyWeather(@RequestParam(value = "notificationTime") int notificationTime) {
+        Runnable runnable = () -> {
+            log.info("asddsddssdsdsdsd");
+        };
+        scheduler.registerWeatherNotification(runnable,notificationTime);
+        return "/setting";
+    }
+
+    @GetMapping("/weather/unnotify")
+    public String unnotifyWeather() {
+        log.info("unno");
+        scheduler.unregisterWeatherNotification();
+        return "/setting";
+    }
 
 }

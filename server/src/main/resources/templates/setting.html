@@ -4,35 +4,74 @@
     <meta charset="UTF-8">
     <title>setting</title>
     <th:block th:insert="~{fragment/menu::menu_css}"/>
+    <script src="../../../../../../../Downloads/alertify.js-0.3.11/src/alertify.js"></script>
 
 </head>
 <body>
-
 <nav th:replace="~{fragment/menu::menu_nav}"></nav>
 <p>
     알림을 받으려면 카카오톡 계정이 필요합니다.
-    <button id="login" onclick="location.href = 'setting/kakao/connect'"
+    <button id="login" onclick="location.href = '/kakao/connect'"
             style=" width:70px; height: 31px; background:url(/images/kakao_login_btn_small.png)  no-repeat"></button>
 </p>
 <p>
     <label>
-        <input type="number" min="0" max="23"/>시 날씨 정보 알림
-        <input type="checkbox"/>
-        <a href="/setting/notice"><input type="button" value="지금 보내보기"/></a>
+        <input type="number" min="0" max="23" id="notificationTime"/>시에 날씨 정보 알립니다.
+        <input type="checkbox" id="weatherCheckbox"/>
     </label>
 </p>
 <p>
     <label>
-        온도 정보 수집
-        <a href="/setting/collectT_H"><input type="button" value="온습도 정보 수집 시작"/></a>
+        주차보고서를 보냅니다.
+        <input type="checkbox" id=""/>
     </label>
 </p>
-<p>
+<form>
     <label>
-        주차 보고 알림
-        <input type="button" value="지금 보내보기"/>
+        온습도 정보를
+        <input type="number" min="0" max="60" id="thTime">
+        분 마다 정보 수집를 수집합니다.
+        <input id="thCheckbox" type="checkbox">
     </label>
-</p>
+</form>
+<label>
+    <a href="/setting/notice"><input type="button" value="모든 알림 지금 보내보기"/></a>
+</label>
 
+<script>
+    function requestData(method, data) {
+        $.ajax({
+            url: host,
+            method: method,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        });
+        window.location.reload();
+    }
+
+    function checkSelect() {
+        var notificationTime = $('#notificationTime').val();
+        var weatherCheckbox = $('#weatherCheckbox');
+        console.log("check select" + weatherCheckbox);
+
+        if($.isNumeric(notificationTime)&& notificationTime>=0 && notificationTime<24){
+            var url;
+            var path = "/setting/weather"
+            if (weatherCheckbox.is(':checked')) {
+                url = path + "/notify?notificationTime=" + notificationTime;
+            } else {
+                url = path + "/unnotify";
+            }
+            $.get(url);
+        }else{
+            alertify.alert("0~23을 입력해 주세요.");
+            weatherCheckbox.prop('checked',false);
+        }
+    }
+
+    $(document).ready(function () {
+        $('#weatherCheckbox').on("click", checkSelect);
+    });
+</script>
 </body>
 </html>
