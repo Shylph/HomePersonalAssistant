@@ -1,5 +1,6 @@
 package com.blogspot.myks790.assistant.server.todo;
 
+import com.blogspot.myks790.assistant.server.security.UserAuthentication;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,9 @@ public class CalendarRestController {
     private final ToDoRepository toDoRepository;
 
     @PostMapping
-    public ToDo create(@RequestBody ToDo toDo) {
+    public ToDo create(@RequestBody ToDo toDo, UserAuthentication authentication) {
         log.info("/calendar/api : create");
+        toDo.setAccount(authentication.getAccount());
         return toDoRepository.save(toDo);
     }
 
@@ -28,9 +30,9 @@ public class CalendarRestController {
 
 
     @GetMapping("/list")
-    public List<ToDo> list() {
+    public List<ToDo> list( UserAuthentication authentication) {
         log.info("list get");
-        return toDoRepository.findAll();
+        return toDoRepository.findAll(authentication.getAccount());
     }
 
     @GetMapping("/week_report")

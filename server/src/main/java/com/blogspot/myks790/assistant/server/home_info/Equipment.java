@@ -1,5 +1,6 @@
 package com.blogspot.myks790.assistant.server.home_info;
 
+import com.blogspot.myks790.assistant.server.security.Account;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,4 +17,7 @@ class Equipment {
     private int port;
     @Column(nullable = false, length = 200)
     private String name;
+    @ManyToOne
+    @JoinColumn(name="account_id")
+    private Account account;
 }

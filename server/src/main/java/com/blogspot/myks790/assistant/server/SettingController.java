@@ -3,6 +3,7 @@ package com.blogspot.myks790.assistant.server;
 import com.blogspot.myks790.assistant.server.home_info.HomeInfo;
 import com.blogspot.myks790.assistant.server.home_info.HomeInfoRepository;
 import com.blogspot.myks790.assistant.server.kakao.KakaoToken;
+import com.blogspot.myks790.assistant.server.kakao.KakaoTokenRepository;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoButton;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoLink;
 import com.blogspot.myks790.assistant.server.kakao.template.KakaoMessageTemplate;
@@ -47,6 +48,8 @@ public class SettingController {
     private final NoticeScheduler scheduler;
     @Autowired
     HomeInfoRepository homeInfoRepository;
+    @Autowired
+    KakaoTokenRepository kakaoTokenRepository;
 
 
     @Autowired
@@ -64,7 +67,7 @@ public class SettingController {
     }
 
     @GetMapping("kakao/callback")
-    public String kakaoCallback(@RequestParam(value = "code") String code, HttpSession session) {
+    public String kakaoCallback(@RequestParam(value = "code") String code, HttpSession session, UserAuthentication authentication) {
         log.info("kakao login callback");
         log.info("kakao login code : " + code);
 
@@ -82,6 +85,8 @@ public class SettingController {
             HttpEntity entity = response.getEntity();
             String src = EntityUtils.toString(entity);
             kakaoToken = new ObjectMapper().readerFor(KakaoToken.class).readValue(src);
+            kakaoToken.setAccount(authentication.getAccount());
+            kakaoTokenRepository.save(kakaoToken);
             EntityUtils.consume(entity);
         } catch (IOException e) {
             e.printStackTrace();

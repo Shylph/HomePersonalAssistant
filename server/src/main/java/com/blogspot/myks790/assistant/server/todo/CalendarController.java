@@ -1,5 +1,6 @@
 package com.blogspot.myks790.assistant.server.todo;
 
+import com.blogspot.myks790.assistant.server.security.UserAuthentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ public class CalendarController {
     private final ToDoRepository toDoRepository;
 
     @GetMapping
-    public ModelAndView  get(){
+    public ModelAndView  get(UserAuthentication userAuthentication){
         List<ToDo> toDoList = toDoRepository.findAll();
         return new ModelAndView("calendar","toDoList",toDoList);
     }
