@@ -57,12 +57,12 @@ public class SettingController {
         Double currentTemp = weatherAPI.forecastGribTemp();
         String message = "현재 방안의 온도는 " + info.getTemperature() + "도 입니다." +
                 "밖의 기온은 " + currentTemp + "도 입니다.";
+        voiceGuidance.createVoice(message, request);
         boolean b = kakaoApi.sendToMeWithKakaotalk(message, authentication);
         if (!b) {
             //실패시 아무 안내 말 없이 그냥 카톡 인증 창으로 이동
             return "redirect:/kakao/connect";
         }
-        voiceGuidance.createVoice(message, request);
         return "/setting";
     }
 
