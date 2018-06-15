@@ -1,6 +1,7 @@
 package com.blogspot.myks790.assistant.server;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,8 +15,10 @@ import java.net.URLEncoder;
 @Slf4j
 @Controller
 public class VoiceGuidance {
-    String clientId = "1ituhkf9u4";//애플리케이션 클라이언트 아이디값";
-    String clientSecret = "HvG141WqSzTVpqPvscMScQ7jji44pfX6Tq3Xk6Me";//애플리케이션 클라이언트 시크릿값";
+    @Value("${css.client.id}")
+    String clientId;//애플리케이션 클라이언트 아이디값";
+    @Value("${css.client.secret}")
+    String clientSecret;//애플리케이션 클라이언트 시크릿값";
     private static String filename;
 
     public void createVoice(String preText, HttpServletRequest request) {
