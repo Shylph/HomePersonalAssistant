@@ -64,6 +64,7 @@
 
     function requestData(method, data) {
         $.ajax({
+            async: false,
             url: host,
             method: method,
             contentType: "application/json",

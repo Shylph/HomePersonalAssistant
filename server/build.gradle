@@ -35,7 +35,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile group: 'org.slf4j', name: 'slf4j-api', version: slf4jVersion
     runtime group: 'ch.qos.logback', name: 'logback-classic', version: logbackVersion
-    runtime('org.springframework.boot:spring-boot-devtools')
+//    runtime('org.springframework.boot:spring-boot-devtools')
     runtime('mysql:mysql-connector-java')
     compile('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
