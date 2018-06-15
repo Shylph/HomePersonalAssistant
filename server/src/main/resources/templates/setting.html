@@ -28,9 +28,9 @@
 <form>
     <label>
         온습도 정보를
-        <input type="number" min="0" max="60" id="thTime">
+        <input type="number" min="0" max="60" id="collectTerm">
         분 마다 정보 수집를 수집합니다.
-        <input id="thCheckbox" type="checkbox">
+        <input id="t_hCheckbox" type="checkbox">
     </label>
 </form>
 <label>
@@ -48,7 +48,7 @@
         window.location.reload();
     }
 
-    function checkSelect() {
+    function checkWeatherSelect() {
         var notificationTime = $('#notificationTime').val();
         var weatherCheckbox = $('#weatherCheckbox');
         console.log("check select" + weatherCheckbox);
@@ -67,9 +67,29 @@
             weatherCheckbox.prop('checked',false);
         }
     }
+    function checkT_HCollect() {
+        var collectTerm = $('#collectTerm').val();
+        var t_hCheckbox = $('#t_hCheckbox');
+        var path = "/setting";
+        if($.isNumeric(collectTerm)&& collectTerm>0) {
+            var url;
+            if (t_hCheckbox.is(':checked')) {
+                url = path + "/collect?collectTerm=" + collectTerm;
+            } else {
+                url = path + "/stopCollect";
+            }
+            $.get(url);
+        }else{
+            alertify.alert("숫자를 입력해 주세요.");
+            t_hCheckbox.prop('checked',false);
+        }
+
+    }
 
     $(document).ready(function () {
-        $('#weatherCheckbox').on("click", checkSelect);
+        $('#weatherCheckbox').on("click", checkWeatherSelect);
+        $('#t_hCheckbox').on("click", checkT_HCollect);
+
     });
 </script>
 </body>

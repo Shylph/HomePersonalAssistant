@@ -14,18 +14,18 @@ import java.util.concurrent.ScheduledFuture;
 public class NoticeScheduler {
     private ThreadPoolTaskScheduler scheduler;
     private ScheduledFuture weatherFuture;
+    private ScheduledFuture collectorFuture;
 
     public NoticeScheduler() {
         scheduler = new ThreadPoolTaskScheduler();
         scheduler.initialize();
-
     }
 
     public void stopScheduler() {
         scheduler.shutdown();
     }
 
-    public ScheduledFuture startScheduler(Runnable runnable, Trigger trigger) {
+    private ScheduledFuture startScheduler(Runnable runnable, Trigger trigger) {
         return scheduler.schedule(runnable, trigger);
     }
 
@@ -37,5 +37,14 @@ public class NoticeScheduler {
     public void unregisterWeatherNotification() {
         if (weatherFuture != null)
             weatherFuture.cancel(false);
+    }
+
+    public void registerT_H_Collector(Runnable runnable, int collectTerm) {
+        collectorFuture = startScheduler(runnable, new CronTrigger("0 */" + collectTerm + " * * * *"));
+    }
+
+    public void unregisterT_H_Collector() {
+        if (collectorFuture != null)
+            collectorFuture.cancel(false);
     }
 }
