@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         log.info("SecurityConfig configure web");
-        web.ignoring().antMatchers("/js/**","/css/**","/images/**");
+        web.ignoring().antMatchers("/js/**","/css/**","/images/**","/voice");
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             http.authorizeRequests().antMatchers("/**").permitAll();
         } else {
             http.authorizeRequests()
-                    .antMatchers("/", "/login", "/login-error", "/login-processing").permitAll()
+                    .antMatchers("/", "/login", "/login-error", "/login-processing","/voice").permitAll()
                     .antMatchers("/**").authenticated();
 
             http.formLogin()

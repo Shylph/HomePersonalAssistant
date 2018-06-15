@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @Slf4j
@@ -32,13 +33,15 @@ public class SettingController {
     private final HomeInfoRepository homeInfoRepository;
     private final KakaoApi kakaoApi;
     private final WeatherAPI weatherAPI;
+    private final VoiceGuidance voiceGuidance;
 
     @Autowired
-    public SettingController(NoticeScheduler scheduler, HomeInfoRepository homeInfoRepository, KakaoApi kakaoApi, WeatherAPI weatherAPI) {
+    public SettingController(NoticeScheduler scheduler, HomeInfoRepository homeInfoRepository, KakaoApi kakaoApi, WeatherAPI weatherAPI, VoiceGuidance voiceGuidance) {
         this.scheduler = scheduler;
         this.homeInfoRepository = homeInfoRepository;
         this.kakaoApi = kakaoApi;
         this.weatherAPI = weatherAPI;
+        this.voiceGuidance = voiceGuidance;
     }
 
 
@@ -66,7 +69,7 @@ public class SettingController {
     }
 
     @GetMapping("/notice")
-    public String notice(UserAuthentication authentication) {
+    public String notice(UserAuthentication authentication, HttpServletRequest request) {
         PageRequest pageRequest =PageRequest.of(1,1, Sort.Direction.DESC,"timestamp");
         Page<HomeInfo> homes =  homeInfoRepository.findAll(pageRequest);
         HomeInfo info = homes.getContent().get(0);
@@ -78,6 +81,7 @@ public class SettingController {
             //실패시 아무 안내 말 없이 그냥 카톡 인증 창으로 이동
             return "redirect:/kakao/connect";
         }
+        voiceGuidance.createVoice(message,request);
         return "/setting";
     }
 

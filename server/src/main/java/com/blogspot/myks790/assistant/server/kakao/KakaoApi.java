@@ -37,6 +37,7 @@ public class KakaoApi {
     private KakaoToken kakaoToken;
 
     private final KakaoTokenRepository kakaoTokenRepository;
+    private String host;
 
     @Autowired
     public KakaoApi(KakaoTokenRepository kakaoTokenRepository) {
@@ -84,6 +85,7 @@ public class KakaoApi {
     }
 
     public boolean sendToMeWithKakaotalk(String message, UserAuthentication authentication) {
+        host = "192.168.137.1";
         if (kakaoToken == null) {
             KakaoToken token = loadToken(authentication);
             if (token == null) {
@@ -96,8 +98,9 @@ public class KakaoApi {
         List<NameValuePair> nvps = new ArrayList<NameValuePair>();
         String value = kakaoToken.getToken_type() + " " + kakaoToken.getAccess_token();
         httpPost.setHeader("Authorization", value);
-        KakaoLink kakaoLink = new KakaoLink("http://localhost:8080");
-        KakaoButton kakaoButton = new KakaoButton("되라", kakaoLink);
+        KakaoLink kakaoLink = new KakaoLink("http://" + host + ":8080/voice?voice=true");
+        KakaoButton kakaoButton = new KakaoButton("음성으로 듣기", kakaoLink);
+        kakaoLink = new KakaoLink("http://" + host + ":8080");
         KakaoMessageTemplate kakaoMessageTemplate = new KakaoMessageTemplate("text", message, kakaoLink);
         kakaoMessageTemplate.addButton(kakaoButton);
 
@@ -130,8 +133,10 @@ public class KakaoApi {
     private KakaoToken loadToken(UserAuthentication authentication) {
         KakaoToken token = null;
         try {
-            token = kakaoTokenRepository.getOne(authentication.getAccount().getAccount_id());
-            token.getAccess_token();
+            if(kakaoToken != null) {
+                token = kakaoTokenRepository.getOne(kakaoToken.getId());
+                token.getAccess_token();
+            }
         } catch (EntityNotFoundException e) {
             token = null;
         }

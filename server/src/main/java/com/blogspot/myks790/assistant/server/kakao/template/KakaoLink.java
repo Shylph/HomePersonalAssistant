@@ -7,4 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class KakaoLink {
     String web_url;
+    String mobile_web_url;
+    public KakaoLink(String url){
+        web_url=url;
+        mobile_web_url=url;
+    }
 }
