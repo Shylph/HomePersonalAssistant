@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,7 +83,13 @@ public class KakaoApi {
         }
     }
 
-    public void sendToMeWithKakaotalk(String message) {
+    public boolean sendToMeWithKakaotalk(String message, UserAuthentication authentication) {
+        if (kakaoToken == null) {
+            KakaoToken token = loadToken(authentication);
+            if (token == null) {
+                return false;
+            }
+        }
         log.info("sendToMeWithKakaotalk");
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost("https://kapi.kakao.com/v2/api/talk/memo/default/send");
@@ -117,6 +124,18 @@ public class KakaoApi {
                 e.printStackTrace();
             }
         }
+        return true;
+    }
+
+    private KakaoToken loadToken(UserAuthentication authentication) {
+        KakaoToken token = null;
+        try {
+            token = kakaoTokenRepository.getOne(authentication.getAccount().getAccount_id());
+            token.getAccess_token();
+        } catch (EntityNotFoundException e) {
+            token = null;
+        }
+        return token;
     }
 
     @GetMapping("kakao/callback")

@@ -12,4 +12,5 @@ public interface HomeInfoRepository extends JpaRepository<HomeInfo, Long> {
 
     @Query("select homeInfo from HomeInfo homeInfo")
     List<HomeInfo> findAllById(@Param("equipment") Equipment equipment);
+
 }

@@ -13,6 +13,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,16 +66,25 @@ public class SettingController {
     }
 
     @GetMapping("/notice")
-    public String notice() {
-        kakaoApi.sendToMeWithKakaotalk("알림 보내기~~~~");
-        weatherAPI.printWeather();
+    public String notice(UserAuthentication authentication) {
+        PageRequest pageRequest =PageRequest.of(1,1, Sort.Direction.DESC,"timestamp");
+        Page<HomeInfo> homes =  homeInfoRepository.findAll(pageRequest);
+        HomeInfo info = homes.getContent().get(0);
+        Double currentTemp = weatherAPI.forecastGribTemp();
+        String message = "현재 방안의 온도는 " + info.getTemperature() + "도 입니다."+
+                "밖의 기온은 "+currentTemp+"도 입니다.";
+        boolean b = kakaoApi.sendToMeWithKakaotalk(message,authentication);
+        if(b == false){
+            //실패시 아무 안내 말 없이 그냥 카톡 인증 창으로 이동
+            return "redirect:/kakao/connect";
+        }
         return "/setting";
     }
 
     @GetMapping("/weather/notify")
     public String notifyWeather(@RequestParam(value = "notificationTime") int notificationTime) {
         Runnable runnable = () -> {
-            log.info("asddsddssdsdsdsd");
+
         };
         scheduler.registerWeatherNotification(runnable,notificationTime);
         return "/setting";
