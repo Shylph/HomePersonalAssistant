@@ -31,7 +31,10 @@ public class NoticeScheduler {
 
 
     public void registerWeatherNotification(Runnable runnable, int notificationTime) {
-        weatherFuture = startScheduler(runnable, new CronTrigger("0 0 " + notificationTime + " * * *"));
+        if (weatherFuture != null) {
+            weatherFuture.cancel(false);
+            weatherFuture = startScheduler(runnable, new CronTrigger("0 0 " + notificationTime + " * * *"));
+        }
     }
 
     public void unregisterWeatherNotification() {
@@ -40,7 +43,10 @@ public class NoticeScheduler {
     }
 
     public void registerT_H_Collector(Runnable runnable, int collectTerm) {
-        collectorFuture = startScheduler(runnable, new CronTrigger("0 */" + collectTerm + " * * * *"));
+        if (collectorFuture != null) {
+            collectorFuture.cancel(false);
+            collectorFuture = startScheduler(runnable, new CronTrigger("0 */" + collectTerm + " * * * *"));
+        }
     }
 
     public void unregisterT_H_Collector() {
